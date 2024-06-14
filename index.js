@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.get('/data', (req, res) => {
+app.get('/get', (req, res) => {
   const domain = req.query.server
   const filePath = './public/source.pdf'
   const fileData = fs.readFileSync(filePath, { encoding: 'base64' })
