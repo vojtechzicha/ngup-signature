@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test signing</title>
+    <script>
+      let socket = null
+
+      function startComm() {
+        socket = new WebSocket('wss://localhost:50001') // replace "example.com" with your websocket server URL
+
+        socket.onopen = function () {
+          var message = {
+            type: 'StartPDMWSConnect',
+            data: {}
+          }
+          console.log(message)
+
+          socket.send(JSON.stringify(message))
+        }
+        socket.onerror = function (error) {
+          alert('WebSocket Error: ' + JSON.stringify(error))
+          console.log(error)
+        }
+        socket.onmessage = function (event) {
+          var message = JSON.parse(event.data)
+          if (message.type === 'PDMStarted') {
+            // React to PDMStarted message here
+            alert('PDMStarted message received')
+            // Your code here
+          } else if (message.type === 'OK') {
+            alert('signing OK')
+          }
+          console.log('Message from server:', message)
+        }
+        alert('started')
+      }
+
+      function startSign() {
+        let server = `${window.location.protocol}//${window.location.host}`,
+          url = `${server}/get?server=${encodeURIComponent(server)}`
+
+        var message = {
+          type: `SignNGUP:${url}`,
+          data: {}
+        }
+        console.log(message)
+
+        if (socket === null || socket.readyState !== socket.OPEN) {
+          alert('no connection')
+          return
+        }
+
+        socket.send(JSON.stringify(message))
+      }
+    </script>
+  </head>
+  <body>
+    <h1>NGUP Podposiova komponenta</h1>
+    <h2>Step #1 - start application</h2>
+    <p>Po kliknuti na odkaz by se mela na pozadi spustit podpisova aplikace.</p>
+    <a href="pc-pdm:startws:50001">Spustit podpisovou aplikaci</a>
+    <h2>Step #2 - check</h2>
+    <p>Po kliknuti se overi, zda aplikace bezi - sledujte javascript konzoli</p>
+    <button onclick="startComm()">Check PDM status</button>
+    <h2>Step #3 - sign</h2>
+    <p>Po kliknuti se spusti podpisovy proces</p>
+    <button onclick="startSign()">Sign</button>
+    <h2>Step #4 - result</h2>
+    <p>
+      Kouknete na <a href="source.pdf">zdrojovy soubor</a> a <a href="target.pdf">podepsany soubor</a> (ktery tu bude
+      pouze tehdy, pokud nejaka operace dopadne dobre).
+    </p>
+  </body>
+</html>
