@@ -13,7 +13,6 @@ app.get('/get', (req, res) => {
   const filePath = './public/source.pdf'
   const fileData = fs.readFileSync(filePath, { encoding: 'base64' })
 
-  data.fileCollection[0].fileBase64 = fileData
   res.json({
     postUrl: `${domain}/post`,
     timeStampUrl: 'https://freetsa.org/tsr',

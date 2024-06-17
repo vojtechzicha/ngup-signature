@@ -6,28 +6,26 @@
       let socket = null
 
       function startComm() {
-        socket = new WebSocket('wss://localhost:50001') // replace "example.com" with your websocket server URL
+        socket = new WebSocket('ws://localhost:50001') // replace "example.com" with your websocket server URL
 
         socket.onopen = function () {
-          var message = {
-            type: 'StartPDMWSConnect',
-            data: {}
-          }
+          var message = 'StartPDMWSConnect'
           console.log(message)
 
-          socket.send(JSON.stringify(message))
+          socket.send(message)
         }
         socket.onerror = function (error) {
           alert('WebSocket Error: ' + JSON.stringify(error))
           console.log(error)
         }
         socket.onmessage = function (event) {
-          var message = JSON.parse(event.data)
-          if (message.type === 'PDMStarted') {
+          console.log(event)
+          var message = event.data
+          if (message === 'PDMStarted') {
             // React to PDMStarted message here
             alert('PDMStarted message received')
             // Your code here
-          } else if (message.type === 'OK') {
+          } else if (message === 'OK') {
             alert('signing OK')
           }
           console.log('Message from server:', message)
@@ -39,10 +37,7 @@
         let server = `${window.location.protocol}//${window.location.host}`,
           url = `${server}/get?server=${encodeURIComponent(server)}`
 
-        var message = {
-          type: `SignNGUP:${url}`,
-          data: {}
-        }
+        var message = `SignNGUP:${url}`
         console.log(message)
 
         if (socket === null || socket.readyState !== socket.OPEN) {
@@ -50,7 +45,7 @@
           return
         }
 
-        socket.send(JSON.stringify(message))
+        socket.send(message)
       }
     </script>
   </head>
