@@ -1,9 +1,13 @@
 const express = require('express')
 const path = require('path')
 const fs = require('fs')
+// const bodyParser = require('body-parser')
 
 const app = express()
 const port = process.env.PORT || 3000
+
+// Parse JSON bodies for this app. This is needed for the POST request
+app.use(express.json({ limit: '50mb' }))
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')))
@@ -30,6 +34,7 @@ app.get('/get', (req, res) => {
 
 app.post('/post', (req, res) => {
   const body = req.body
+  console.log(body)
   const base64 = body.fileCollection[0].fileBase64
   fs.writeFile('./public/target.pdf', base64, { encoding: 'base64' }, err => {
     if (err) {
