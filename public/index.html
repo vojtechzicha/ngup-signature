@@ -50,6 +50,34 @@
       }
     </script>
   </head>
+  <!--
+  # 0. Get the mutation
+  call backend and start signing mutation
+
+mutace pro start podepisování (post):
+http://10.0.0.107:31506/graphql
+request body:
+{
+  "query": "mutation startDocumentSign {\n  startDocumentSign(input: { documentId: \"XXX\" }) {\n    getUrl\n  }\n}"
+}
+
+pro mock - nahradit si url za https://ngup-sign.fly.dev/get?server=https%3A%2F%2Fngup-sign.fly.dev
+
+  # 1. Start PDM application
+
+spustím modal
+
+- klikněte zde pro nastartování aplikace - <a href="pc-pdm:startws:50001">Spustit podpisovou aplikaci</a>
+- pokud nemáte podpisovou aplikaci, stáhněte si ji zde - <a href="https://helpdesk.pilscom.cz/manual/PDM/Pilscom%20Document%20Manager%201.10.2.21.zip">Stáhnout podpisovou aplikaci</a>
+
+  # 2. Check PDM status
+
+- zavolat StartPDMWSConnect a počkat na PDMStarted - poté volám SignNGUP:${url} a schovávám modal
+
+  # 3. Sign
+
+- pokud mi na stránce přijde "OK", tak zobrazím alert "Podepisování dokončeno"
+  -->
   <body>
     <h1>NGUP Podposiova komponenta</h1>
     <h2>Step #1 - start application</h2>
